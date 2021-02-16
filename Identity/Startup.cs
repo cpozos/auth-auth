@@ -5,11 +5,20 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using NETCore.MailKit.Extensions;
+using NETCore.MailKit.Infrastructure.Internal;
+using Microsoft.Extensions.Configuration;
 
 namespace Identity
 {
    public class Startup
    {
+      private readonly IConfiguration _config;
+
+      public Startup(IConfiguration configuration)
+      {
+         _config = configuration;
+      }
 
       public void ConfigureServices(IServiceCollection services)
       {
@@ -26,9 +35,16 @@ namespace Identity
             config.Password.RequireDigit = false;
             config.Password.RequireNonAlphanumeric = false;
             config.Password.RequireUppercase = false;
+            config.SignIn.RequireConfirmedEmail = true;
          })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
+
+         services.AddMailKit(config =>
+         {
+            var mailKitOptions = _config.GetSection("Email").Get<MailKitOptions>();
+            config.UseMailKit(mailKitOptions);
+         });
 
          services.ConfigureApplicationCookie(config =>
          {
