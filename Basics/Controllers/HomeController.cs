@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Basics.Controllers
 {
@@ -9,9 +10,15 @@ namespace Basics.Controllers
          return View();
       }
 
+      [Authorize]
       public IActionResult Secret()
       {
          return View();
+      }
+
+      public IActionResult Authenticate()
+      {
+         return RedirectToAction(nameof(Index));
       }
    }
 }
