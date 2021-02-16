@@ -35,10 +35,10 @@ namespace Basics
 
          app.UseRouting();
 
-
+         // Who is requesting? Who are you?
          app.UseAuthentication();
 
-         // Who can access?
+         // Who can access? Are you allowed?
          app.UseAuthorization();
 
          app.UseEndpoints(endpoints =>
